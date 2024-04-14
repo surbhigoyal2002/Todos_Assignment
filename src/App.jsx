@@ -64,10 +64,11 @@ function App() {
   }
 
   return (
-    <Container>
+    <div>
+      <Container className = "main-box">
       <Row>
         <Col className = "col1">
-          <ListGroup>
+          <ListGroup className="List-Group">
           {
             list.map((data, key) => { 
               return(
@@ -95,18 +96,21 @@ function App() {
           <div>
             <b>Completed : </b> {status ? `${true}` : `${list[index]?.completed}`}
           </div>
-          <span>
+          <div className = "btn-group">
+          
           <Button variant="danger" onClick= {
             () => {deleteTask()}
           }>Delete</Button>
           <Button variant="success" onClick = {
             () => {completeTask()}
           }>Completed</Button>
-          </span>
+          
+          </div>
           </div>
         </Col>
       </Row>
     </Container>
+    </div>
   );
 }
 
