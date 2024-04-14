@@ -1,5 +1,8 @@
+//importing hooks from react
 import {useState, useEffect} from 'react';
+//importing axios
 import axios from 'axios';
+//imports from react-bootstrap
 import ListGroup from 'react-bootstrap/ListGroup';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -9,10 +12,11 @@ import Button from 'react-bootstrap/Button';
 
 function App() {
 
-  const[list, setList] = useState([]);
-  const[index, setIndex] = useState(2);
-  const[status, setStatus] = useState();
+  const[list, setList] = useState([]); //storing todo-tasks in list
+  const[index, setIndex] = useState(2); //storing indexes of tasks in index
+  const[status, setStatus] = useState(); // completion or deletion status
 
+  //asynchronous function fetching api and updating setList
   const getApiData = async () => {
     
     try{
@@ -26,36 +30,41 @@ function App() {
     }
   };
   
+  //using useEffect hook
   useEffect(() => {
     getApiData();
   }, []);
   
+  //on clicking task
   const showTask = (e, key) => {
     e.preventDefault();
-    setIndex(key);
-    setStatus(list[index]?.completed);
+    setIndex(key);//assigning key to index
+    setStatus(list[index]?.completed); // assigning completion status as true or false
     console.log(index); 
     console.log(list[index]); 
   }
 
+  //on clicking completed button
   const completeTask = (e) =>{
     axios
-      .patch(`https://jsonplaceholder.typicode.com/todos/${index+1}`, {completed : true})
+      .patch(`https://jsonplaceholder.typicode.com/todos/${index+1}`, {completed : true})// updating the task completion status using axios patch
       .then((res) => {
         console.log(res.data);
-        setStatus(true);
+        setStatus(true);// setting status of completion as true
       })
       .catch((err) => {
         console.log(err);
       })
   }
 
+   //on clicking delete button
   const deleteTask = (e) =>{
     axios
-      .delete(`https://jsonplaceholder.typicode.com/todos/${index+1}`, {completed : false})
+      .delete(`https://jsonplaceholder.typicode.com/todos/${index+1}`, {completed : false}) // deleting the task by using axios delete 
       .then((res) => {
         console.log(res.data);
         console.log(`Deleted task ${index}`);
+        setStatus(false); // setting status of completion as false
       })
       .catch((err) => {
         console.log(err);
@@ -70,6 +79,7 @@ function App() {
         <Col className = "col1">
           <ListGroup className="List-Group">
           {
+            //using map to traverse the task list
             list.map((data, key) => { 
               return(
                 <ListGroup.Item className = "item" onClick={(e) => {
